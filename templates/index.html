@@ -1,0 +1,27 @@
+
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <form class="registration" action="/" method="post" enctype="multipart/form-data">
+        <input type="text" name="name" placeholder="Name"> <br>
+        <input type="email" name="email" placeholder="Email"> <br>
+        <input type="text" name="user_name" placeholder="Username"> <br>
+        <input type="radio" id="male" name="sex" placeholder="Sex">
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="sex" placeholder="Sex">
+        <label for="female">Female</label> <br>
+        <input type="text" name="height" placeholder="Height"> <br>
+        <input type="text" name="weight" placeholder="Weight"> <br>
+        <input type="password" name="password" placeholder="Password"> <br>
+        <input type="password" name="confirm_password" placeholder="Confirm password"> <br>
+        <input type="file" name="file">
+        <br>
+        <button class="ui blue button custom-button" type="submit">Sign Up</button>
+    </form>
+</div>
+{% endblock %}
