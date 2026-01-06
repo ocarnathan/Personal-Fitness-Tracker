@@ -6,22 +6,35 @@
 {% endblock %}
 
 {% block body %}
+<h1>Fitness Tracker Registration Form</h1>
 <div class="content">
-    <form class="registration" action="/" method="post" enctype="multipart/form-data">
-        <input type="text" name="name" placeholder="Name"> <br>
-        <input type="email" name="email" placeholder="Email"> <br>
-        <input type="text" name="user_name" placeholder="Username"> <br>
-        <input type="radio" id="male" name="sex" placeholder="Sex">
-        <label for="male">Male</label>
-        <input type="radio" id="female" name="sex" placeholder="Sex">
-        <label for="female">Female</label> <br>
-        <input type="text" name="height" placeholder="Height"> <br>
-        <input type="text" name="weight" placeholder="Weight"> <br>
-        <input type="password" name="password" placeholder="Password"> <br>
-        <input type="password" name="confirm_password" placeholder="Confirm password"> <br>
-        <input type="file" name="file">
+    <form class="registration" action="/register" method="post" enctype="multipart/form-data">
+        <input type="text" name="name" placeholder="Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="user_name" placeholder="Username" required>
+        <label>
+            Male
+            <input type="radio" name="sex" value="male" required>
+        </label>
+        <label>
+            Female
+            <input type="radio" name="sex" value="female" required>
+        </label>
+        <label>
+            Height:
+            <input type="number" name="feet" placeholder="ft" min="1" max="8" required>
+            <input type="number" name="inches" placeholder="in" min="0" max="11" required>
+        </label>
+        <label>
+            Weight (lbs):
+            <input type="number" name="weight" placeholder="e.g. 165" step="0.1" required>
+        </label>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirm_password" placeholder="Confirm password" required>
+        <input type="file" name="profile_photo_link">
         <br>
-        <button class="ui blue button custom-button" type="submit">Sign Up</button>
+        <button class="ui blue button" type="submit">Sign Up</button>
+        <!-- <button class="btn btn-primary" type="submit">Sign Up</button> -->
     </form>
 </div>
 {% endblock %}

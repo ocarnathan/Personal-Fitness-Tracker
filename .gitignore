@@ -1,1 +1,16 @@
-/references.txt
+# Python virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Flask instance folder (configs, secrets, local DBs)
+instance/
+
+# Databases
+*.sqlite3
+*.db
+
+# Local-only reference notes
+references.txt
