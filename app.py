@@ -9,6 +9,7 @@ import logging
 
 
 app = Flask(__name__)
+app.secret_key = ''
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trainee.db'
 app.logger.setLevel(logging.INFO)
 
@@ -60,7 +61,20 @@ def index():
 @app.route("/login", methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-         pass
+        user_name = request.form.get('user_name')
+        password = request.form.get('password')
+
+        user = Trainee.query.filter_by(user_name=user_name).first()
+
+        if user and user.check_password(password):
+            session['user_id'] = user.id
+            session['user_name'] = user.user_name
+            session['logged_in'] = True
+            app.logger.info(f'User {user_name} logged in.')
+            return redirect(url_for('dashboard', user_name=user.user_name))
+        
+        return render_template('login.html', error="Invalid username or password")
+
     return render_template('login.html')
 
 
@@ -98,13 +112,22 @@ def register():
                 app.logger.info('User {user_name} registered.')
                 all_trainees = Trainee.query.all()
                 print(all_trainees)
-            return render_template('login.html')
+            return redirect('login')
 
         except ValueError as e:
              app.logger.error(f"Registration failed: {e}")
              return f"Registration Error: {e}", 400
         
     return render_template('register.html')
+
+
+@app.route("/dashboard/<string:user_name>", methods=['POST', 'GET'])
+def dashboard(user_name):
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    trainee = Trainee.query.filter_by(user_name=user_name).first()
+    return render_template('dashboard.html', trainee=trainee)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

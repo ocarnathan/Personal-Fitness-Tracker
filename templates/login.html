@@ -1,6 +1,6 @@
 
 {% extends 'base.html' %}
-
+{% block title %}Fitness Tracker Login{% endblock %}
 {% block head %}
 
 {% endblock %}
@@ -9,7 +9,8 @@
 <h1>Fitness Tracker Registration Form</h1>
 <div class="content">
     <form class="login" action="/login" method="post" enctype="multipart/form-data">
-        <input type="email" name="email" placeholder="Email" required>
+        <!-- <input type="email" name="email" placeholder="Email" required> -->
+        <input type="text" name="user_name" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
         <br>
         <button class="ui blue button" type="submit">Login</button>

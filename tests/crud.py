@@ -1,7 +1,6 @@
 from app import app, db, Trainee
 from datetime import datetime, timezone
 
-
 # constants
 NAME = "Test User"
 EMAIL = "Test@gmail.com"
