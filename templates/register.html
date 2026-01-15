@@ -7,8 +7,12 @@
 
 {% block body %}
 <h1>Fitness Tracker Registration Form</h1>
+    {% if error %}
+    <p>{{ error}}</p>
+    {% endif %}
 <div class="content">
     <form class="registration" action="/register" method="post" enctype="multipart/form-data">
+        {{form.hidden_tag()}}
         <input type="text" name="name" placeholder="Name" required>
         <input type="email" name="email" placeholder="Email" required>
         <input type="text" name="user_name" placeholder="Username" required>

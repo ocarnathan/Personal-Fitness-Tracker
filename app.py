@@ -6,6 +6,7 @@ from sqlalchemy.orm import validates
 from datetime import datetime, timezone
 import re
 import logging
+from forms import RegistrationForm
 
 
 app = Flask(__name__)
@@ -72,40 +73,29 @@ def login():
             session['logged_in'] = True
             app.logger.info(f'User {user_name} logged in.')
             return redirect(url_for('dashboard', user_name=user.user_name))
-        
         return render_template('login.html', error="Invalid username or password")
-
     return render_template('login.html')
 
 
 @app.route("/register", methods=['POST', 'GET'])
 def register():
-    if request.method == 'POST':
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        height = form.feet.data + form.inches.data / 12
+        app.logger.info(f"--- Form Submission ---")
+
         try:
-            name = request.form.get('name')
-            email = request.form.get('email')
-            user_name = request.form.get('user_name')
-            password = request.form.get('password') # TODO: add password validation + encryption
-            confirm_password = request.form.get('confirm_password')
-            if password != confirm_password:
-                raise ValueError('Passwords do not match.')
-            sex = request.form.get('sex')
-            height = float(request.form.get('feet')) + float(request.form.get('inches'))/12
-            weight = float(request.form.get('weight'))
-            profile_photo_link = request.form.get('profile_photo_link')
-
-            print(f"--- Form Submission ---")
-
             trainee = Trainee(
-                name = name,
-                email = email,
-                user_name = user_name,
-                password = password,
-                sex = sex,
+                name = form.name.data,
+                email = form.email.data,
+                user_name = form.user_name.data,
+                password = form.password.data,
+                sex = form.sex.data,
                 height = height,
-                weight = weight,
-                profile_photo_link = 'profile_photo_link' # TODO: fix photo loading on form
-            )
+                weight = form.weight.data,
+                profile_photo_link = "profile_photo_link"            
+                )
             with app.app_context():
                 db.session.add(trainee)
                 db.session.commit()
@@ -113,12 +103,14 @@ def register():
                 all_trainees = Trainee.query.all()
                 print(all_trainees)
             return redirect('login')
-
+    
         except ValueError as e:
              app.logger.error(f"Registration failed: {e}")
-             return f"Registration Error: {e}", 400
-        
-    return render_template('register.html')
+            #  return f"Registration Error: {e}", 400
+        return render_template('register.html', form=form, error=form.errors)
+    else:
+        app.logger.error(f"Registration failed: {form.errors}")
+        return render_template('register.html', form=form, error=form.errors)
 
 
 @app.route("/dashboard/<string:user_name>", methods=['POST', 'GET'])
