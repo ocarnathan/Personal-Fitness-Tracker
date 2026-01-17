@@ -14,3 +14,6 @@ instance/
 
 # Local-only reference notes
 references.txt
+
+# Environment variables
+.env

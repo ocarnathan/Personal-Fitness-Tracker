@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField
+from flask_wtf.file import FileField, FileRequired
 from wtforms import StringField, PasswordField, IntegerField, FloatField
 from wtforms.validators import DataRequired, Email, EqualTo
 
@@ -11,7 +11,6 @@ class RegistrationForm(FlaskForm):
     feet = IntegerField(validators=[DataRequired()])
     inches = IntegerField(validators=[DataRequired()])
     weight = FloatField(validators=[DataRequired()])
-    # profile_photo_link = FileField()
-    profile_photo_link = StringField(validators=[DataRequired()])
+    profile_photo_link = FileField(validators=[FileRequired()])
     password = PasswordField(validators=[DataRequired()])
     confirm_password = PasswordField(validators=[DataRequired(), EqualTo('password')])

@@ -2,16 +2,19 @@ from flask import Flask, render_template, session, redirect, url_for, request, j
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from sqlalchemy.orm import validates
 from datetime import datetime, timezone
 import re
 import logging
 from forms import RegistrationForm
+from utils import save_photo
+import os
 
 
 app = Flask(__name__)
-app.secret_key = ''
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///trainee.db'
+app.secret_key = os.getenv("FLASK_SECRET_KEY")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_NAME")
 app.logger.setLevel(logging.INFO)
 
 db = SQLAlchemy(app)
@@ -84,8 +87,10 @@ def register():
     if form.validate_on_submit():
         height = form.feet.data + form.inches.data / 12
         app.logger.info(f"--- Form Submission ---")
+        photo = form.profile_photo_link.data
 
         try:
+            file_name = save_photo(photo, app.instance_path)
             trainee = Trainee(
                 name = form.name.data,
                 email = form.email.data,
@@ -94,7 +99,7 @@ def register():
                 sex = form.sex.data,
                 height = height,
                 weight = form.weight.data,
-                profile_photo_link = "profile_photo_link"            
+                profile_photo_link = file_name         
                 )
             with app.app_context():
                 db.session.add(trainee)
